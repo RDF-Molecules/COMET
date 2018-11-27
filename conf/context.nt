@@ -1,0 +1,3 @@
+<http://iais.comet.edu/context> <http://xmlns.com/foaf/0.1/name>        _:any .
+<http://iais.comet.edu/context> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>   <http://dbpedia.org/class/yago/Actor109765278> .
+<http://iais.comet.edu/context> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>   <http://dbpedia.org/class/yago/Politician110450303> .
