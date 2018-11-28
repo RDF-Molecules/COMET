@@ -48,7 +48,6 @@ object CometIntegration {
       }
       results = results :+ row
     })
-    Logger.info(s"Results size: ${results.length}")
     results
   }
 
@@ -119,18 +118,16 @@ object CometIntegration {
   def getMetrics(results: List[JsObject]) : (Int, Int, Int, Int) = {
     Logger.info("Inside Metrics")
     var tnMap = FCAMoleculeMap.keySet
-    Logger.info(s"Number of elements: ${tnMap.size}")
-    Logger.info(s"$results")
+    Logger.info(s"Number of total molecules: ${tnMap.size}")
     results.foreach{ result =>
       val mArray = (result \ "molecules").as[Array[Int]]
       val pArray = (result \ "properties").as[Array[Int]]
       if(mArray.length > 1 && pArray.length > 0){
         //only if all context properties are present in FCA
         if(containsAllContexts(pArray)){
-          Logger.info("Contains all contexts")
           val cmb = mArray.combinations(2).map{ case Array(x, y) => (x, y) }.toList
           cmb.foreach{ pair =>
-            if(getEqualityUnderContext(FCAMoleculeMap(pair._1), FCAMoleculeMap(pair._2), "profession")){
+            if(getEqualityUnderContext(FCAMoleculeMap(pair._1), FCAMoleculeMap(pair._2), "subject")){
               //True Positive
               TP += 1
             }
@@ -143,10 +140,10 @@ object CometIntegration {
       }
     }
 
-    Logger.info(s"Number of elements not integrated: ${tnMap.size}")
+    Logger.info(s"Number of molecules not integrated: ${tnMap.size}")
 
     tnMap.toSeq.combinations(2).map{ case Seq(x, y) => (x, y) }.toList.foreach{ pair =>
-      if(getEqualityUnderContext(FCAMoleculeMap(pair._1), FCAMoleculeMap(pair._2), "profession")){
+      if(getEqualityUnderContext(FCAMoleculeMap(pair._1), FCAMoleculeMap(pair._2), "subject")){
         FN += 1
       }
       else{
@@ -190,9 +187,9 @@ object CometIntegration {
   def loadDatasets() : Seq[Molecule] = {
     val aModel = DataCache.getModel("actors").get
     val pModel = DataCache.getModel("politicians").get
-    //val mModel = DataCache.getModel("mixed").get
+    val mModel = DataCache.getModel("mixed").get
 
-    MoleculeManager.convertToMolecules(aModel) ++ MoleculeManager.convertToMolecules(pModel) //++ MoleculeManager.convertToMolecules(mModel)
+    MoleculeManager.convertToMolecules(aModel) ++ MoleculeManager.convertToMolecules(pModel) ++ MoleculeManager.convertToMolecules(mModel)
   }
 
   val propActor : (Property, String) = (RDF.`type`, "http://dbpedia.org/class/yago/Actor109765278")

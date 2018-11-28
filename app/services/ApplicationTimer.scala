@@ -34,13 +34,13 @@ class ApplicationTimer @Inject() (clock: Clock, appLifecycle: ApplicationLifecyc
   Logger.info(s"ApplicationTimer demo: Starting application at $start.")
 
   //paths to data files
-  val actorsPath = "conf/data/dummy_d1.rdf"
-  val polPath = "conf/data/dummy_d2.rdf"
-  //val mixPath = "conf/data/e1_mixed.rdf"
+  val actorsPath = "conf/data/e1_actors.rdf"
+  val polPath = "conf/data/e1_politicians.rdf"
+  val mixPath = "conf/data/e1_mixed.rdf"
 
   loadFileIntoCache(actorsPath, "actors")
   loadFileIntoCache(polPath, "politicians")
-  //loadFileIntoCache(mixPath, "mixed")
+  loadFileIntoCache(mixPath, "mixed")
 
 
   // When the application starts, register a stop hook with the
