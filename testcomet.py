@@ -1,8 +1,6 @@
 from perfect_matching import MFuhsionPerfect
 import codecs
-import json
 from time import time
-from rdflib import Graph, URIRef
 
 def toString(s):
     return u''.join(s).encode('ascii','ignore').strip()
@@ -96,6 +94,7 @@ dataset_size = 1000
 # y = number of similar molecules with different context
 configuration = "2-2"
 
+#threshold percentile
 threshold = 97
 
 #  Run Experiment:
@@ -103,5 +102,4 @@ threshold = 97
 prepareGSForCOMET("context_evaluation/" + str(dataset_size) + "/" + configuration + "/gs_" + str(dataset_size) + ".txt")
 
 # run MINTE and COMET
-runFCA = True
 testMFuhsionPerfect("context_evaluation/" + str(dataset_size) + "/" + configuration + "/d1_rtl.txt","context_evaluation/" + str(dataset_size) + "/" + configuration + "/d2_rtl.txt", threshold)

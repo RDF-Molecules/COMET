@@ -69,23 +69,10 @@ class MFuhsionPerfect:
                 table.append(rtl['head']['uri'])
 
     def probeTables(self, left_table, right_table):
-
         # initialize the similarity matrix
         if len(left_table) > 0 and len(right_table) > 0:
-            # simmatrix = [[0 for i in xrange(len(right_table))] for j in xrange(len(left_table))]
             simmatrix = np.zeros((len(left_table), len(right_table)), float)
 
-            # for i in xrange(len(left_table)):
-            #     for j in xrange(len(right_table)):
-            #         start_sim_time = time()
-            #
-            #         simscore = self.sim(left_table[i],right_table[j])
-            #
-            #         finish_sim_time = time()
-            #         self.total_sim_time += finish_sim_time - start_sim_time
-            #
-            #         if simscore >= self.threshold:
-            #             simmatrix[i][j] = simscore
             start_sim_time = time()
             for i in xrange(0,len(left_table),self.batchSize):
                 for j in xrange(0, len(right_table), self.batchSize):
@@ -185,49 +172,6 @@ class MFuhsionPerfect:
             return True
         return False
 
-    def fca(self, molecules, context):
-        contextItems = []
-        for prop in context:
-            #when context is of the form "x property must match" we must consider all the values of this property
-            if context[prop] is None:
-                for tail in molecules[0]['tail']:
-                    if tail['prop'] == prop:
-                        contextItems.append((tail['prop'], tail['value']))
-            else:
-                contextItems.append((prop, context[prop]))
-
-        mat = []
-        for molecule in molecules:
-            row = [0] * len(contextItems)
-            for idx, contextItem in enumerate(contextItems):
-                for tail in molecule['tail']:
-                    if tail['prop'] == contextItem[0] and tail['value'] == contextItem[1]:
-                        row[idx] = 1
-            mat.append(row)
-
-        url = "http://localhost:4444/fca"
-        headers = {'content-type': "application/json"}
-        data = {"data": mat}
-        try:
-            response = requests.post(url, data=json.dumps(data, ensure_ascii=False), headers=headers)
-        except ConnectionError as e:
-            print "connection error"
-            return all(v == 1 for v in [item for sublist in mat for item in sublist])
-        resp_object = ujson.loads(response.text)
-        resultFlag = False
-
-        for obj in resp_object:
-            if len(obj['properties']) > 0 and len(obj['molecules']) == 2 and 0 in obj['molecules']:
-                resultFlag = True
-
-        # if molecules[0]['head']['uri'] == "http://dbpedia.org/resource/Ben_Wyatt_d1_actor2" and molecules[1]['head']['uri'] == "http://dbpedia.org/resource/Ben_Wyatt_d2_actor1":
-        #     print contextItems
-        #     print mat
-        #     print resp_object
-        #     print resultFlag
-
-        return resultFlag
-
     def sim(self, uri1, uri2):
         url = "http://localhost:9000/similarity/"+self.simfunction
         data = {"tasks": [{"uri1": uri1[1:-1], "uri2": uri2[1:-1]}]}
@@ -256,58 +200,6 @@ class MFuhsionPerfect:
             i = i if (j < self.batchSize-1) else i+1
         return results
 
-    # def execute(self, rtl1, rtl2):
-    #     self.left = rtl1
-    #     self.right = rtl2
-    #
-    #     self.stage1(self.left, self.table2, self.table1,self.similarityMatrix, self.threshold, self.toBeJoined)
-    #     self.stage1(self.right, self.table1, self.table2, self.similarityMatrix, self.threshold, self.toBeJoined)
-    #
-    # def stage1(self, rtl, other_table, own_table, similarity, threshold, output):
-    #     # insert rtl1 into its own table
-    #     if rtl not in own_table:
-    #         own_table.append(rtl)
-    #
-    #     # probe rtl against the other table
-    #     self.probe(rtl, other_table, similarity, threshold, output)
-    #
-    # def probe(self, rtl, table, similarity, threshold, output):
-    #     probing_head = rtl['head']
-    #     probing_head_index = probing_head['index']
-    #     for record in table:
-    #         head = record['head']
-    #         head_index = head['index']
-    #
-    #         # either probing_head is row and head is column , or vice versa
-    #
-    #         if (probing_head, head) not in self.computedJoins:
-    #             # check similarity using the threshold
-    #             test_sim = self.sim(probing_head, head, similarity)
-    #             if test_sim > threshold:
-    #                 # (record, rtl) and (rtl, record) are considered the same in our case, check if it's already in the results
-    #                 # if (record, rtl) not in output:
-    #                 #     output.append((rtl, record))
-    #                 self.computedJoins.append((probing_head, head))
-    #                 if probing_head['row']:
-    #                     self.result_matrix[(probing_head_index, head_index)] = test_sim
-    #                 else:
-    #                     self.result_matrix[(head_index, probing_head_index)] = test_sim
-    #
-    #             else:
-    #                 self.computedJoins.append((probing_head, head))
-    #                 if probing_head['row']:
-    #                     self.result_matrix[(probing_head_index, head_index)] = 0
-    #                 else:
-    #                     self.result_matrix[(head_index, probing_head_index)] = 0
-    #
-    # def sim(self, incoming, existing, similarity):
-    #     # if the incoming element is located in rows of the similarity matrix, then indexing will be [inc][exist]
-    #     if incoming['row']:
-    #         return similarity[incoming['index']][existing['index']]
-    #     else:
-    #         # otherwise the element is in columns, then indexing is [exist][inc]
-    #         return similarity[existing['index']][incoming['index']]
-
     def transformDictToArray(self):
         indexes = sorted(self.result_matrix, key=operator.itemgetter(0, 1))
 
@@ -327,19 +219,5 @@ class MFuhsionPerfect:
         cost_matrix = make_cost_matrix(inputMatrix, lambda cost: sys.maxsize - cost)
         m = Munkres()
         perfect_indexes = m.compute(cost_matrix)
-
-        # produce the final result
-        # find if rowIndex is in table1 or table2
-        # if self.table1[0]['head']['row']:
-        #     # index a is in table1
-        #     for (a, b) in perfect_indexes:
-        #         # find elements with indexes a,b in the left and right tables
-        #
-        #         self.toBeJoined.append(())
-        # else:
-        #     # index a is in table2
-        #     for (a, b) in perfect_indexes
-        #
-        #
 
         return perfect_indexes
