@@ -88,7 +88,7 @@ def testMFuhsionPerfect(path1, path2, threshold):
         (a) Read the subjects from Gold Standard and store locally
 """
 # dataset_size = number of distinct molecules in dataset
-dataset_size = 100
+dataset_size = 1000
 
 # configuration: a string with the format "x-y"
 # where x, y are integers and
@@ -100,8 +100,8 @@ threshold = 97
 
 #  Run Experiment:
 # (a) Read the subjects from Gold Standard and store locally
-prepareGSForCOMET("C:/Users/mtasnim/git/context_evaluation/" + str(dataset_size) + "/" + configuration + "/gs_" + str(dataset_size) + ".txt")
+prepareGSForCOMET("context_evaluation/" + str(dataset_size) + "/" + configuration + "/gs_" + str(dataset_size) + ".txt")
 
 # run MINTE and COMET
 runFCA = True
-testMFuhsionPerfect("C:/Users/mtasnim/git/context_evaluation/" + str(dataset_size) + "/" + configuration + "/d1_rtl.txt","C:/Users/mtasnim/git/context_evaluation/" + str(dataset_size) + "/" + configuration + "/d2_rtl.txt", threshold)
+testMFuhsionPerfect("context_evaluation/" + str(dataset_size) + "/" + configuration + "/d1_rtl.txt","context_evaluation/" + str(dataset_size) + "/" + configuration + "/d2_rtl.txt", threshold)
