@@ -1,0 +1,59 @@
+Semantic Join Blocking Perfect Operator
+Reading C:/Users/mtasnim/git/context_evaluation/1000/1-1/d1_rtl.txt
+Reading C:/Users/mtasnim/git/context_evaluation/1000/1-1/d2_rtl.txt
+Executing Join
+MINTE: Semantic Join Blocking Perfect Operator
+Overall  1000  pairs
+Total operator time  2854.57999992 seconds including  2467.27900004 seconds for similarity and  82.4320001602 seconds for FCA
+Clean time is  304.86899972 seconds
+Threshold Percentile 97
+Precision 0.54
+Recall 0.54
+-----
+COMET: Semantic Join Blocking Perfect Operator
+Overall  1000  pairs
+Threshold Percentile 97
+Precision 1.0
+Recall 1.0
+-----
+Semantic Join Blocking Perfect Operator
+Reading C:/Users/mtasnim/git/context_evaluation/1000/1-2/d1_rtl.txt
+Reading C:/Users/mtasnim/git/context_evaluation/1000/1-2/d2_rtl.txt
+Executing Join
+0.6463130971870017
+MINTE: Semantic Join Blocking Perfect Operator
+Overall  1000  pairs
+Total operator time  2989.37199998 seconds including  2270.42599988 seconds for similarity and  79.8519999981 seconds for FCA
+Clean time is  639.094000101 seconds
+Threshold Percentile 97
+Precision 0.449
+Recall 0.449
+-----
+COMET: Semantic Join Blocking Perfect Operator
+Overall  1000  pairs
+Threshold Percentile 97
+Precision 0.708
+Recall 0.708
+-----
+Semantic Join Blocking Perfect Operator
+Reading C:/Users/mtasnim/git/context_evaluation/1000/2-2/d1_rtl.txt
+Reading C:/Users/mtasnim/git/context_evaluation/1000/2-2/d2_rtl.txt
+Executing Join
+0.645992483153487
+MINTE: Semantic Join Blocking Perfect Operator
+Overall  1000  pairs
+Total operator time  3192.26400018 seconds including  2294.45900011 seconds for similarity and  87.2320001125 seconds for FCA
+Clean time is  810.572999954 seconds
+Threshold Percentile 97
+Precision 0.408
+Recall 0.408
+-----
+COMET: Semantic Join Blocking Perfect Operator
+Overall  1000  pairs
+Threshold Percentile 97
+Precision 0.558
+Recall 0.558
+-----
+
+
+
